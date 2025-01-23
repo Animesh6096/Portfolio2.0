@@ -1,0 +1,44 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Node modules
+/node_modules/
+
+# Build directories
+/dist/
+/build/
+/out/
+
+# Dependency directories
+/.pnp/
+/.pnp.js
+
+# Testing
+/coverage/
+
+# Production
+/.env.production
+/.env.local
+/.env.development.local
+/.env.test.local
+
+# Misc
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# OS-specific files
+ehthumbs.db
+Icon?
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
