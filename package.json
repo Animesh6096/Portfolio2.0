@@ -1,13 +1,13 @@
 {
-  "name": "vite-react-typescript-starter",
+  "name": "portfolio2.0",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "clean": "rm -rf dist"
   },
   "dependencies": {
     "@firebase/storage": "^0.13.5",
