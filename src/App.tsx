@@ -85,7 +85,7 @@ function App() {
               <div className="absolute -inset-1 rounded-full bg-purple-500/10 blur-md"></div>
               <div className="relative z-10 w-full h-full rounded-full overflow-hidden border-4 border-purple-400/50">
                 <img
-                  src="src/IMG_6463 (1) (1).jpg"
+                  src={`${import.meta.env.BASE_URL}images/profile.jpg`}
                   alt="Profile"
                   className="w-full h-full object-cover rounded-full"
                 />
