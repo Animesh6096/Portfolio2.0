@@ -6,7 +6,6 @@ import BackToTop from './components/BackToTop';
 import { Link } from 'react-router-dom';
 import Background3D from './components/Background3D';
 
-
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [contentVisible, setContentVisible] = useState(false);
@@ -54,9 +53,9 @@ function App() {
   return (
     <>
       <Background3D />
-      <div className="darker-overlay opacity-50"></div> {/* Reduced opacity from 0.85 to 0.50 */}
+      <div className="darker-overlay"></div> {/* Added Darker Overlay */}
       {/* Reduce the opacity of the grid background to make 3D more visible */}
-      <div className="grid-background opacity-30"> {/* Increased opacity from 0.20 to 0.30 */}
+      <div className="grid-background opacity-20">
         {/* Static Background Layer */}
         <div className="grid-background">
           {/* Main glows */}
@@ -70,8 +69,8 @@ function App() {
         </div>
       </div>
 
-      <div className="gradient-overlay opacity-60 -z-20"></div> {/* Reduced opacity from 0.80 to 0.60 */}
-      <div className="vignette opacity-60 -z-10"></div> {/* Reduced opacity from 0.80 to 0.60 */}
+      <div className="gradient-overlay opacity-80 -z-20"></div>
+      <div className="vignette opacity-80 -z-10"></div>
 
       {/* Content Layer */}
       <div className="relative min-h-screen bg-transparent">
