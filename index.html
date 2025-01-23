@@ -2,12 +2,42 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="/icons/favicon.ico" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Animesh's Portfolio</title>
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#a855f7" />
+    <meta name="description" content="Animesh Bhattacharjee - Computer Science Student and Developer Portfolio" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="AB Portfolio" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16x16.png" />
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/logo192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/icons/logo512.png" />
+    <link rel="apple-touch-icon" href="/icons/logo192.png" />
+    <link rel="icon" type="image/jpeg" sizes="192x192" href="/icons/logo192.jpg" />
+    <link rel="icon" type="image/jpeg" sizes="512x512" href="/icons/logo512.jpg" />
+    <link rel="apple-touch-icon" href="/icons/logo192.jpg" />
   </head>
   <body class="bg-deep-black">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+              console.log('SW registered:', registration);
+            })
+            .catch(error => {
+              console.log('SW registration failed:', error);
+            });
+        });
+      }
+    </script>
   </body>
 </html>

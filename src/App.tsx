@@ -5,6 +5,7 @@ import LoadingScreen from './components/LoadingScreen';
 import BackToTop from './components/BackToTop';
 import { Link } from 'react-router-dom';
 import Background3D from './components/Background3D';
+import PWAPrompt from './components/PWAPrompt';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -476,6 +477,7 @@ function App() {
 
         </div>
       </div>
+      <PWAPrompt />
     </>
   );
 }
