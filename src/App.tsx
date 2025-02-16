@@ -214,7 +214,7 @@ function App() {
                   </div>
                   <div className="text-right">
                     <p className="text-gray-400">Graduating September 2025</p>
-                    <p className="text-purple-400">CGPA: 3.54</p>
+                    <p className="text-purple-400">CGPA: 3.60</p>
                   </div>
                 </div>
                 <p className="text-gray-300 mt-4">
