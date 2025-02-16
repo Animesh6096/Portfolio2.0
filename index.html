@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Update favicon links to use absolute paths -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Animesh's Portfolio</title>
+    <link rel="manifest" href="/Portfolio2.0/manifest.json" />
+    <meta name="theme-color" content="#a855f7" />
+    <meta name="description" content="Animesh Bhattacharjee - Computer Science Student and Developer Portfolio" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="AB Portfolio" />
+    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+    <!-- Load Calendly initialization script -->
+    <script>
+      window.onload = function() {
+        if (!window.Calendly) {
+          console.error('Calendly not loaded');
+        }
+      }
+    </script>
+    <script type="module" crossorigin src="/Portfolio2.0/assets/index-COBMHVeA.js"></script>
+    <link rel="stylesheet" crossorigin href="/Portfolio2.0/assets/index-CaA15DbE.css">
+  <link rel="manifest" href="/Portfolio2.0/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/Portfolio2.0/registerSW.js"></script></head>
+  <body class="bg-deep-black">
+    <div id="root"></div>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+              console.log('SW registered:', registration);
+            })
+            .catch(error => {
+              console.log('SW registration failed:', error);
+            });
+        });
+      }
+    </script>
+  </body>
+</html>
