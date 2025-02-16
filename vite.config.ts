@@ -31,7 +31,7 @@ export default defineConfig({
       }
     })
   ],
-  base: '/', // or your specific base path if not deploying to root
+  base: process.env.VITE_BASE_URL || '/', // or your specific base path if not deploying to root
   build: {
     assetsDir: 'assets',
     outDir: 'dist',

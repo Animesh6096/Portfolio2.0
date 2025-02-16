@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
+  "homepage": "https://animesh6096.github.io/Portfolio2.0/",
   "dependencies": {
     "@firebase/storage": "^0.13.5",
     "@types/mongodb": "^4.0.6",
