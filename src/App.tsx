@@ -1,11 +1,20 @@
 import { useEffect, useState } from 'react';
-// Update the imports to include Facebook icon
-import { Github, Linkedin, Facebook, Code, BookOpen, Briefcase, Camera, Heart, Phone, Mail, Plus } from 'lucide-react';
+import { Github, Linkedin, Facebook, Code, BookOpen, Briefcase, Camera, Heart, Phone, Mail, Plus, Calendar } from 'lucide-react';
 import LoadingScreen from './components/LoadingScreen';
 import BackToTop from './components/BackToTop';
 import { Link } from 'react-router-dom';
 import Background3D from './components/Background3D';
 import PWAPrompt from './components/PWAPrompt';
+
+// Update the Calendly type declaration at the top
+declare global {
+  interface Window {
+    Calendly: {
+      initPopupWidget: (options: { url: string }) => void;
+      showPopupWidget: (url: string) => void;
+    };
+  }
+}
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -461,18 +470,44 @@ function App() {
             </div>
           </div>
 
-          {/* Contact Section */}
+          {/* Update just the Contact Section */}
           <div className="text-center mt-32">
-            <h2 className="text-3xl font-semibold mb-6 bg-gradient-to-r from-purple-300 to-purple-500 text-transparent bg-clip-text animate-on-scroll delay-400">Get In Touch</h2>
+            <h2 className="text-3xl font-semibold mb-6 bg-gradient-to-r from-purple-300 to-purple-500 text-transparent bg-clip-text animate-on-scroll delay-400">
+              Get In Touch
+            </h2>
             <p className="text-gray-300 mb-8 text-lg animate-on-scroll delay-500">
               Interested in collaboration? Let's connect and discuss opportunities!
             </p>
-            <a 
-              href="mailto:banimesh2002@gmail.com" 
-              className="inline-block px-10 py-4 rounded-full bg-gradient-to-r from-purple-400 to-purple-600 hover:opacity-90 transition-opacity text-white font-semibold shadow-lg shadow-purple-500/25 text-lg animate-on-scroll delay-600"
-            >
-              Contact Me
-            </a>
+            <div className="animate-on-scroll delay-600">
+              {/* Contact Buttons - Now with consistent widths */}
+              <div className="flex flex-col sm:flex-row justify-center gap-4">
+                <a 
+                  href="mailto:banimesh2002@gmail.com" 
+                  className="inline-block w-64 px-8 py-4 rounded-full bg-gradient-to-r from-purple-400 to-purple-600 hover:opacity-90 transition-opacity text-white font-semibold shadow-lg shadow-purple-500/25"
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    <Mail className="w-5 h-5" />
+                    Contact Me
+                  </span>
+                </a>
+                <button 
+                  onClick={() => {
+                    const url = 'https://calendly.com/banimesh2002/30min';
+                    if (window.Calendly) {
+                      window.Calendly.showPopupWidget(url);
+                    } else {
+                      window.open(url, '_blank');
+                    }
+                  }}
+                  className="inline-block w-64 px-8 py-4 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-purple-300 font-semibold border border-purple-400/20"
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    <Calendar className="w-5 h-5" />
+                    Schedule Meeting
+                  </span>
+                </button>
+              </div>
+            </div>
           </div>
 
         </div>

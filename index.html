@@ -14,6 +14,15 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="AB Portfolio" />
+    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+    <!-- Load Calendly initialization script -->
+    <script>
+      window.onload = function() {
+        if (!window.Calendly) {
+          console.error('Calendly not loaded');
+        }
+      }
+    </script>
   </head>
   <body class="bg-deep-black">
     <div id="root"></div>
