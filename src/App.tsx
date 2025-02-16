@@ -5,6 +5,7 @@ import BackToTop from './components/BackToTop';
 import { Link } from 'react-router-dom';
 import Background3D from './components/Background3D';
 import PWAPrompt from './components/PWAPrompt';
+import Navigation from './components/Navigation';
 
 // Update the Calendly type declaration at the top
 declare global {
@@ -62,6 +63,7 @@ function App() {
 
   return (
     <>
+      <Navigation />
       <Background3D />
       <div className="darker-overlay"></div> {/* Added Darker Overlay */}
       {/* Reduce the opacity of the grid background to make 3D more visible */}
@@ -135,7 +137,7 @@ function App() {
           </div>
 
           {/* About Section */}
-          <div className="mb-20 animate-on-scroll delay-200">
+          <div id="profile" className="mb-20 animate-on-scroll delay-200">
             <h2 className="text-3xl font-semibold mb-6 bg-gradient-to-r from-purple-300 to-purple-500 text-transparent bg-clip-text">Profile</h2>
             <p className="text-gray-300 leading-relaxed">
               A Computer Science student at BRAC University, driven by the transformative power of technology. My studies equip me with
@@ -147,7 +149,7 @@ function App() {
           </div>
 
           {/* Skills Section */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20 animate-on-scroll delay-300">
+          <div id="skills" className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20 animate-on-scroll delay-300">
             <div className="p-6 rounded-xl bg-white/5 backdrop-blur-sm border border-purple-400/20 card-zoom">
               <Code className="w-8 h-8 text-purple-400 mb-4" />
               <h3 className="text-xl font-semibold mb-2 bg-gradient-to-r from-purple-300 to-purple-500 text-transparent bg-clip-text">Development</h3>
@@ -166,7 +168,7 @@ function App() {
           </div>
 
           {/* Professional Experience Section */}
-          <div className="mb-20">
+          <div id="experience" className="mb-20">
             <h2 className="text-3xl font-semibold mb-8 bg-gradient-to-r from-purple-300 to-purple-500 text-transparent bg-clip-text flex items-center gap-3 animate-on-scroll delay-400">
               <Briefcase className="w-8 h-8 text-purple-400" />
               Professional Experience
@@ -212,7 +214,7 @@ function App() {
           </div>
 
           {/* Education Section */}
-          <div className="mb-20">
+          <div id="education" className="mb-20">
             <h2 className="text-3xl font-semibold mb-8 bg-gradient-to-r from-purple-300 to-purple-500 text-transparent bg-clip-text animate-on-scroll delay-400">Education</h2>
             <div className="space-y-8">
               <div className="bg-white/5 backdrop-blur-sm p-6 rounded-xl card-zoom animate-on-scroll delay-500">
@@ -245,7 +247,7 @@ function App() {
           </div>
 
           {/* Research Section */}
-          <div className="mb-20">
+          <div id="research" className="mb-20">
             <h2 className="text-3xl font-semibold mb-8 bg-gradient-to-r from-purple-300 to-purple-500 text-transparent bg-clip-text flex items-center gap-3 animate-on-scroll delay-400">
               <Code className="w-8 h-8 text-purple-400" />
               Research
@@ -273,7 +275,7 @@ function App() {
           </div>
 
           {/* Projects Section */}
-          <div className="mb-20">
+          <div id="projects" className="mb-20">
             <h2 className="text-3xl font-semibold mb-8 bg-gradient-to-r from-purple-300 to-purple-500 text-transparent bg-clip-text animate-on-scroll delay-600">Academic Projects</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
               {/* Animal Detection Project - Listed First */}
@@ -364,7 +366,7 @@ function App() {
           </div>
 
           {/* Blog Section */}
-          <div className="mb-20">
+          <div id="blog" className="mb-20">
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-3xl font-semibold bg-gradient-to-r from-purple-300 to-purple-500 text-transparent bg-clip-text flex items-center gap-3 animate-on-scroll delay-400">
                 <BookOpen className="w-8 h-8 text-purple-400" />
@@ -430,7 +432,7 @@ function App() {
           </div>
 
           {/* Certifications Section */}
-          <div className="mb-20">
+          <div id="certifications" className="mb-20">
             <h2 className="text-3xl font-semibold mb-8 bg-gradient-to-r from-purple-300 to-purple-500 text-transparent bg-clip-text flex items-center gap-3 animate-on-scroll delay-400">
               <Code className="w-8 h-8 text-purple-400" />
               Certifications & Courses
@@ -450,9 +452,9 @@ function App() {
           </div>
 
           {/* Activities Section */}
-          <div className="mb-20"></div>
+          <div id="activities" className="mb-20"></div>
           {/* Activities Section */}
-          <div className="mb-20">
+          <div id="activities" className="mb-20">
             <h2 className="text-3xl font-semibold mb-8 bg-gradient-to-r from-purple-300 to-purple-500 text-transparent bg-clip-text flex items-center gap-3 animate-on-scroll delay-400">
               <Heart className="w-8 h-8 text-purple-400" />
               Activities
@@ -471,7 +473,7 @@ function App() {
           </div>
 
           {/* Update just the Contact Section */}
-          <div className="text-center mt-32">
+          <div id="contact" className="text-center mt-32">
             <h2 className="text-3xl font-semibold mb-6 bg-gradient-to-r from-purple-300 to-purple-500 text-transparent bg-clip-text animate-on-scroll delay-400">
               Get In Touch
             </h2>
