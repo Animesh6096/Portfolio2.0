@@ -147,12 +147,12 @@ function App() {
             <div className="p-6 rounded-xl bg-white/5 backdrop-blur-sm border border-purple-400/20 card-zoom">
               <BookOpen className="w-8 h-8 text-purple-400 mb-4" />
               <h3 className="text-xl font-semibold mb-2 bg-gradient-to-r from-purple-300 to-purple-500 text-transparent bg-clip-text">Programming</h3>
-              <p className="text-gray-300">Python, C, Javascript<br />MySQL, TensorFlow, MediaPipe</p>
+              <p className="text-gray-300">Python, C, Javascript<br />MySQL, MongoDB, TensorFlow, MediaPipe</p>
             </div>
             <div className="p-6 rounded-xl bg-white/5 backdrop-blur-sm border border-purple-400/20 card-zoom">
               <Camera className="w-8 h-8 text-purple-400 mb-4" />
               <h3 className="text-xl font-semibold mb-2 bg-gradient-to-r from-purple-300 to-purple-500 text-transparent bg-clip-text">Design</h3>
-              <p className="text-gray-300">Adobe Illustrator<br />Adobe Photoshop</p>
+              <p className="text-gray-300">Adobe Illustrator<br />Adobe Photoshop<br />Figma</p>
             </div>
           </div>
 
