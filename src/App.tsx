@@ -481,33 +481,40 @@ function App() {
               Interested in collaboration? Let's connect and discuss opportunities!
             </p>
             <div className="animate-on-scroll delay-600">
-              {/* Contact Buttons - Now with consistent widths */}
-              <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <a 
-                  href="mailto:banimesh2002@gmail.com" 
-                  className="inline-block w-64 px-8 py-4 rounded-full bg-gradient-to-r from-purple-400 to-purple-600 hover:opacity-90 transition-opacity text-white font-semibold shadow-lg shadow-purple-500/25"
-                >
-                  <span className="flex items-center justify-center gap-2">
-                    <Mail className="w-5 h-5" />
-                    Contact Me
-                  </span>
-                </a>
-                <button 
-                  onClick={() => {
-                    const url = 'https://calendly.com/banimesh2002/30min';
-                    if (window.Calendly) {
-                      window.Calendly.showPopupWidget(url);
-                    } else {
-                      window.open(url, '_blank');
-                    }
-                  }}
-                  className="inline-block w-64 px-8 py-4 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-purple-300 font-semibold border border-purple-400/20"
-                >
-                  <span className="flex items-center justify-center gap-2">
-                    <Calendar className="w-5 h-5" />
-                    Schedule Meeting
-                  </span>
-                </button>
+              <div className="max-w-[600px] mx-auto px-4">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                  <a 
+                    href="mailto:banimesh2002@gmail.com" 
+                    className="w-[280px] px-8 py-4 rounded-full bg-gradient-to-r from-purple-400 to-purple-600 hover:opacity-90 transition-opacity text-white font-semibold shadow-lg shadow-purple-500/25"
+                  >
+                    <span className="flex items-center justify-center gap-2">
+                      <Mail className="w-5 h-5" />
+                      Contact Me
+                    </span>
+                  </a>
+                  <button 
+                    onClick={() => {
+                      const url = 'https://calendly.com/banimesh2002/30min';
+                      try {
+                        if (window.Calendly) {
+                          window.Calendly.initPopupWidget({ url: url });
+                        } else {
+                          console.error('Calendly not loaded, falling back to direct link');
+                          window.open(url, '_blank');
+                        }
+                      } catch (error) {
+                        console.error('Error opening Calendly:', error);
+                        window.open(url, '_blank');
+                      }
+                    }}
+                    className="w-[280px] px-8 py-4 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-purple-300 font-semibold border border-purple-400/20"
+                  >
+                    <span className="flex items-center justify-center gap-2">
+                      <Calendar className="w-5 h-5" />
+                      Schedule Meeting
+                    </span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
