@@ -14,17 +14,21 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="AB Portfolio" />
-    <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
-    <!-- Load Calendly initialization script -->
+    <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+    <!-- Add better error handling for Calendly -->
     <script>
       window.onload = function() {
         if (!window.Calendly) {
           console.error('Calendly not loaded');
+          // Retry loading if failed
+          const script = document.createElement('script');
+          script.src = 'https://assets.calendly.com/assets/external/widget.js';
+          document.head.appendChild(script);
         }
       }
     </script>
-    <script type="module" crossorigin src="/Portfolio2.0/assets/index-nVxiEo99.js"></script>
-    <link rel="stylesheet" crossorigin href="/Portfolio2.0/assets/index-DKLlQ4Qq.css">
+    <script type="module" crossorigin src="/Portfolio2.0/assets/index-BVrmv_dI.js"></script>
+    <link rel="stylesheet" crossorigin href="/Portfolio2.0/assets/index-UKm9H_t_.css">
   <link rel="manifest" href="/Portfolio2.0/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/Portfolio2.0/registerSW.js"></script></head>
   <body class="bg-deep-black">
     <div id="root"></div>
