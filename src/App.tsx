@@ -180,14 +180,10 @@ function App() {
           <div id="profile" className="mb-20 animate-on-scroll delay-200">
             <h2 className="text-3xl font-semibold mb-6 bg-gradient-to-r from-purple-300 to-purple-500 text-transparent bg-clip-text">Profile</h2>
             <p className="text-gray-300 leading-relaxed">
-              A Computer Science student at BRAC University, driven by the transformative power of technology. My studies equip me with
-              the skills to make a real impact. Thriving in both technical and creative roles at Nyntax as a QA Manager, I honed my ability to
-              ensure flawless user experiences through rigorous testing. Alongside my technical expertise, my teaching experience has
-              strengthened my ability to communicate complex ideas effectively. This, along with my insatiable curiosity, fuels my
-              fascination with machine learning.
+              I am a Computer Science student at BRAC University, passionate about AI, machine learning, and development. I worked as a QA Manager at Nyntax, focusing on improving user experience. My teaching experience has strengthened my ability to explain complex ideas. Currently, I am working on my thesis in lip reading while also developing web applications. I am always eager to learn and grow.
             </p>
           </div>
-
+          
           {/* Skills Section */}
           <div id="skills" className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20 animate-on-scroll delay-300">
             <div className="p-6 rounded-xl bg-white/5 backdrop-blur-sm border border-purple-400/20 card-zoom">
