@@ -14,17 +14,35 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="AB Portfolio" />
-    <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
-    <!-- Add better error handling for Calendly -->
+    
+    <!-- Improved Calendly loading with global availability flag -->
+    <script>
+      window.calendlyLoaded = false;
+      function initCalendly() {
+        window.calendlyLoaded = true;
+        console.log('Calendly initialized successfully');
+      }
+    </script>
+    <script src="https://assets.calendly.com/assets/external/widget.js" async onload="initCalendly()"></script>
+    
+    <!-- Better Calendly error handling and retry logic -->
     <script>
       window.onload = function() {
-        if (!window.Calendly) {
-          console.error('Calendly not loaded');
-          // Retry loading if failed
-          const script = document.createElement('script');
-          script.src = 'https://assets.calendly.com/assets/external/widget.js';
-          document.head.appendChild(script);
-        }
+        setTimeout(() => {
+          if (!window.calendlyLoaded) {
+            console.warn('Calendly not loaded on first attempt, retrying...');
+            // Remove old script if it exists
+            const oldScript = document.querySelector('script[src*="calendly"]');
+            if (oldScript) oldScript.remove();
+            
+            // Retry loading with new script element
+            const script = document.createElement('script');
+            script.src = 'https://assets.calendly.com/assets/external/widget.js';
+            script.async = true;
+            script.onload = initCalendly;
+            document.head.appendChild(script);
+          }
+        }, 2000); // Check after 2 seconds
       }
     </script>
   </head>

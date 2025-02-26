@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Github, Linkedin, Facebook, Code, BookOpen, Briefcase, Camera, Heart, Phone, Mail, Plus, Calendar } from 'lucide-react';
 import LoadingScreen from './components/LoadingScreen';
 import BackToTop from './components/BackToTop';
@@ -14,12 +14,14 @@ declare global {
       initPopupWidget: (options: { url: string }) => void;
       showPopupWidget: (url: string) => void;
     };
+    calendlyLoaded?: boolean;
   }
 }
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [contentVisible, setContentVisible] = useState(false);
+  const [isCalendlyLoading, setIsCalendlyLoading] = useState(false);
 
   useEffect(() => {
     // Handle initial loading
@@ -56,6 +58,44 @@ function App() {
       return () => observer.disconnect();
     }
   }, [isLoading]);
+
+  // Improved Calendly handling
+  const openCalendlyScheduler = useCallback(() => {
+    const url = 'https://calendly.com/banimesh2002/30min';
+    setIsCalendlyLoading(true);
+    
+    // Function to attempt using Calendly widget
+    const tryUseCalendly = () => {
+      if (window.Calendly) {
+        try {
+          window.Calendly.initPopupWidget({ url: url });
+          console.log('Calendly widget opened successfully');
+          setIsCalendlyLoading(false);
+          return true;
+        } catch (error) {
+          console.error('Error opening Calendly widget:', error);
+          return false;
+        }
+      }
+      return false;
+    };
+
+    // Try using Calendly immediately if available
+    if (tryUseCalendly()) return;
+    
+    // If we got here, Calendly wasn't immediately available
+    console.log('Calendly not immediately available, waiting...');
+    
+    // Try again after a short delay
+    setTimeout(() => {
+      if (!tryUseCalendly()) {
+        // If still not working, fall back to opening in a new tab
+        console.warn('Calendly widget unavailable, falling back to direct URL');
+        window.open(url, '_blank');
+        setIsCalendlyLoading(false);
+      }
+    }, 1000);
+  }, []);
 
   if (isLoading) {
     return <LoadingScreen />;
@@ -493,26 +533,21 @@ function App() {
                     </span>
                   </a>
                   <button 
-                    onClick={() => {
-                      const url = 'https://calendly.com/banimesh2002/30min';
-                      try {
-                        if (window.Calendly) {
-                          window.Calendly.initPopupWidget({ url: url });
-                        } else {
-                          console.error('Calendly not loaded, falling back to direct link');
-                          window.open(url, '_blank');
-                        }
-                      } catch (error) {
-                        console.error('Error opening Calendly:', error);
-                        window.open(url, '_blank');
-                      }
-                    }}
-                    className="w-[280px] px-8 py-4 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-purple-300 font-semibold border border-purple-400/20"
+                    onClick={openCalendlyScheduler}
+                    disabled={isCalendlyLoading}
+                    className="w-[280px] px-8 py-4 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-purple-300 font-semibold border border-purple-400/20 relative"
                   >
-                    <span className="flex items-center justify-center gap-2">
-                      <Calendar className="w-5 h-5" />
-                      Schedule Meeting
-                    </span>
+                    {isCalendlyLoading ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <span className="w-5 h-5 border-2 border-purple-300 border-t-transparent rounded-full animate-spin"></span>
+                        <span>Loading...</span>
+                      </span>
+                    ) : (
+                      <span className="flex items-center justify-center gap-2">
+                        <Calendar className="w-5 h-5" />
+                        Schedule Meeting
+                      </span>
+                    )}
                   </button>
                 </div>
               </div>
