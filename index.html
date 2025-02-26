@@ -15,36 +15,53 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="AB Portfolio" />
     
-    <!-- Improved Calendly loading with global availability flag -->
+    <!-- Improved Calendly integration -->
     <script>
       window.calendlyLoaded = false;
       function initCalendly() {
         window.calendlyLoaded = true;
-        console.log('Calendly initialized successfully');
+        if (window.Calendly) {
+          console.log('Calendly initialized successfully');
+        } else {
+          console.warn('Calendly object not available after load');
+          retryCalendlyLoad();
+        }
+      }
+
+      function retryCalendlyLoad() {
+        const maxRetries = 3;
+        let retryCount = 0;
+
+        function tryLoad() {
+          if (retryCount >= maxRetries) {
+            console.error('Failed to load Calendly after multiple attempts');
+            return;
+          }
+
+          console.log(`Retrying Calendly load (attempt ${retryCount + 1}/${maxRetries})`);
+          const script = document.createElement('script');
+          script.src = 'https://assets.calendly.com/assets/external/widget.js';
+          script.async = true;
+          script.onload = () => {
+            if (window.Calendly) {
+              window.calendlyLoaded = true;
+              console.log('Calendly loaded successfully on retry');
+            } else {
+              retryCount++;
+              setTimeout(tryLoad, 1000);
+            }
+          };
+          script.onerror = () => {
+            retryCount++;
+            setTimeout(tryLoad, 1000);
+          };
+          document.head.appendChild(script);
+        }
+
+        tryLoad();
       }
     </script>
     <script src="https://assets.calendly.com/assets/external/widget.js" async onload="initCalendly()"></script>
-    
-    <!-- Better Calendly error handling and retry logic -->
-    <script>
-      window.onload = function() {
-        setTimeout(() => {
-          if (!window.calendlyLoaded) {
-            console.warn('Calendly not loaded on first attempt, retrying...');
-            // Remove old script if it exists
-            const oldScript = document.querySelector('script[src*="calendly"]');
-            if (oldScript) oldScript.remove();
-            
-            // Retry loading with new script element
-            const script = document.createElement('script');
-            script.src = 'https://assets.calendly.com/assets/external/widget.js';
-            script.async = true;
-            script.onload = initCalendly;
-            document.head.appendChild(script);
-          }
-        }, 2000); // Check after 2 seconds
-      }
-    </script>
   </head>
   <body class="bg-deep-black">
     <div id="root"></div>

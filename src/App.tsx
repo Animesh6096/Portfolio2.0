@@ -64,9 +64,11 @@ function App() {
     const url = 'https://calendly.com/banimesh2002/30min';
     setIsCalendlyLoading(true);
     
-    // Function to attempt using Calendly widget
-    const tryUseCalendly = () => {
-      if (window.Calendly) {
+    const maxAttempts = 3;
+    let attempts = 0;
+
+    const tryOpenCalendly = () => {
+      if (window.Calendly && window.calendlyLoaded) {
         try {
           window.Calendly.initPopupWidget({ url: url });
           console.log('Calendly widget opened successfully');
@@ -80,21 +82,21 @@ function App() {
       return false;
     };
 
-    // Try using Calendly immediately if available
-    if (tryUseCalendly()) return;
-    
-    // If we got here, Calendly wasn't immediately available
-    console.log('Calendly not immediately available, waiting...');
-    
-    // Try again after a short delay
-    setTimeout(() => {
-      if (!tryUseCalendly()) {
-        // If still not working, fall back to opening in a new tab
-        console.warn('Calendly widget unavailable, falling back to direct URL');
+    const attemptOpen = () => {
+      if (attempts >= maxAttempts) {
+        console.error('Failed to open Calendly after multiple attempts');
         window.open(url, '_blank');
         setIsCalendlyLoading(false);
+        return;
       }
-    }, 1000);
+
+      if (!tryOpenCalendly()) {
+        attempts++;
+        setTimeout(attemptOpen, 1000);
+      }
+    };
+
+    attemptOpen();
   }, []);
 
   if (isLoading) {
