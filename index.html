@@ -14,21 +14,39 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="AB Portfolio" />
-    <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
-    <!-- Add better error handling for Calendly -->
+    
+    <!-- Improved Calendly loading with global availability flag -->
     <script>
-      window.onload = function() {
-        if (!window.Calendly) {
-          console.error('Calendly not loaded');
-          // Retry loading if failed
-          const script = document.createElement('script');
-          script.src = 'https://assets.calendly.com/assets/external/widget.js';
-          document.head.appendChild(script);
-        }
+      window.calendlyLoaded = false;
+      function initCalendly() {
+        window.calendlyLoaded = true;
+        console.log('Calendly initialized successfully');
       }
     </script>
-    <script type="module" crossorigin src="/Portfolio2.0/assets/index-BVrmv_dI.js"></script>
-    <link rel="stylesheet" crossorigin href="/Portfolio2.0/assets/index-UKm9H_t_.css">
+    <script src="https://assets.calendly.com/assets/external/widget.js" async onload="initCalendly()"></script>
+    
+    <!-- Better Calendly error handling and retry logic -->
+    <script>
+      window.onload = function() {
+        setTimeout(() => {
+          if (!window.calendlyLoaded) {
+            console.warn('Calendly not loaded on first attempt, retrying...');
+            // Remove old script if it exists
+            const oldScript = document.querySelector('script[src*="calendly"]');
+            if (oldScript) oldScript.remove();
+            
+            // Retry loading with new script element
+            const script = document.createElement('script');
+            script.src = 'https://assets.calendly.com/assets/external/widget.js';
+            script.async = true;
+            script.onload = initCalendly;
+            document.head.appendChild(script);
+          }
+        }, 2000); // Check after 2 seconds
+      }
+    </script>
+    <script type="module" crossorigin src="/Portfolio2.0/assets/index-lh5L21a8.js"></script>
+    <link rel="stylesheet" crossorigin href="/Portfolio2.0/assets/index-DVcTIP-y.css">
   <link rel="manifest" href="/Portfolio2.0/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/Portfolio2.0/registerSW.js"></script></head>
   <body class="bg-deep-black">
     <div id="root"></div>
