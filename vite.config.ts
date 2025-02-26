@@ -39,13 +39,13 @@ export default defineConfig({
         theme_color: '#a855f7',
         icons: [
           {
-            src: '/icons/logo192.jpg',
+            src: './icons/logo192.jpg',
             sizes: '192x192',
             type: 'image/jpeg',
             purpose: 'any maskable'
           },
           {
-            src: '/icons/logo512.jpg',
+            src: './icons/logo512.jpg',
             sizes: '512x512',
             type: 'image/jpeg',
             purpose: 'any maskable'
@@ -54,11 +54,19 @@ export default defineConfig({
       }
     })
   ],
-  base: '/',
+  base: './',
   build: {
     assetsDir: 'assets',
     outDir: 'dist',
     copyPublicDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          icons: ['lucide-react']
+        }
+      }
+    }
   },
   optimizeDeps: {
     include: ['lucide-react']
