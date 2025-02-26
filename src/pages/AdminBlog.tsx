@@ -1,54 +1,76 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { ChevronLeft, Upload } from 'lucide-react';
 import { DEFAULT_BLOG_IMAGE } from '../utils/blogUtils';
 import LoadingScreen from '../components/LoadingScreen';
 import Background3D from '../components/Background3D';
+import { createBlogPost, getAllCategories } from '../services/blogService';
 
 function AdminBlog() {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     title: '',
     excerpt: '',
     content: '',
     category: '',
+    tags: '',
     image: DEFAULT_BLOG_IMAGE,
     readTime: '5 min read'
   });
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [newCategory, setNewCategory] = useState('');
+  const [showNewCategoryInput, setShowNewCategoryInput] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setTimeout(() => setIsLoading(false), 800);
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    try {
-      // Validate required fields
-      const requiredFields = ['title', 'excerpt', 'content', 'category'];
-      const missingFields = requiredFields.filter(field => !formData[field as keyof typeof formData]);
-      
-      if (missingFields.length > 0) {
-        throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const categoriesData = await getAllCategories();
+        setCategories(categoriesData);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
       }
+    };
+    fetchCategories();
+  }, []);
 
-      console.log('Submitting form data:', formData); // Debug log
-      
-      alert('Demo mode: no backend connected. Post not saved.');
-      window.location.href = '/blog';
-    } catch (error) {
-      console.error('Error creating blog post:', error);
-      alert(error instanceof Error ? error.message : 'Failed to create blog post. Please try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Remove the handleImageChange function for now since we're using a default image
-  // We'll implement proper image upload later
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      // Process tags into array
+      const tagsArray = formData.tags
+        .split(',')
+        .map((tag) => tag.trim())
+        .filter(Boolean);
+
+      const postData = {
+        ...formData,
+        tags: tagsArray,
+        category: formData.category || newCategory,
+      };
+
+      await createBlogPost(postData);
+      navigate('/blog');
+    } catch (error) {
+      console.error('Error creating blog post:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (isLoading) {
     return <LoadingScreen />;
@@ -84,8 +106,9 @@ function AdminBlog() {
             <input
               type="text"
               id="title"
+              name="title"
               value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              onChange={handleInputChange}
               className="w-full px-4 py-2 rounded-lg bg-white/5 backdrop-blur-sm border border-purple-400/20 text-gray-100 focus:border-purple-400/40 focus:outline-none focus:ring-2 focus:ring-purple-400/20"
               required
             />
@@ -93,22 +116,59 @@ function AdminBlog() {
 
           <div>
             <label htmlFor="category" className="block text-purple-300 mb-2">Category</label>
-            <input
-              type="text"
-              id="category"
-              value={formData.category}
-              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-              className="w-full px-4 py-2 rounded-lg bg-white/5 backdrop-blur-sm border border-purple-400/20 text-gray-100 focus:border-purple-400/40 focus:outline-none focus:ring-2 focus:ring-purple-400/20"
-              required
-            />
+            <div className="flex gap-4">
+              {!showNewCategoryInput ? (
+                <>
+                  <select
+                    id="category"
+                    name="category"
+                    value={formData.category}
+                    onChange={handleInputChange}
+                    className="flex-1 px-4 py-2 rounded-lg bg-white/5 backdrop-blur-sm border border-purple-400/20 text-gray-100 focus:outline-none focus:border-purple-400/40"
+                  >
+                    <option value="">Select a category</option>
+                    {categories.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    onClick={() => setShowNewCategoryInput(true)}
+                    className="px-4 py-2 rounded-lg bg-purple-500/20 text-purple-300 hover:bg-purple-500/30"
+                  >
+                    New Category
+                  </button>
+                </>
+              ) : (
+                <>
+                  <input
+                    type="text"
+                    value={newCategory}
+                    onChange={(e) => setNewCategory(e.target.value)}
+                    placeholder="Enter new category"
+                    className="flex-1 px-4 py-2 rounded-lg bg-white/5 backdrop-blur-sm border border-purple-400/20 text-gray-100 focus:outline-none focus:border-purple-400/40"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowNewCategoryInput(false)}
+                    className="px-4 py-2 rounded-lg bg-purple-500/20 text-purple-300 hover:bg-purple-500/30"
+                  >
+                    Use Existing
+                  </button>
+                </>
+              )}
+            </div>
           </div>
 
           <div>
             <label htmlFor="excerpt" className="block text-purple-300 mb-2">Excerpt</label>
             <textarea
               id="excerpt"
+              name="excerpt"
               value={formData.excerpt}
-              onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
+              onChange={handleInputChange}
               className="w-full px-4 py-2 rounded-lg bg-white/5 backdrop-blur-sm border border-purple-400/20 text-gray-100 focus:border-purple-400/40 focus:outline-none focus:ring-2 focus:ring-purple-400/20 h-24"
               required
             />
@@ -118,10 +178,24 @@ function AdminBlog() {
             <label htmlFor="content" className="block text-purple-300 mb-2">Content</label>
             <textarea
               id="content"
+              name="content"
               value={formData.content}
-              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+              onChange={handleInputChange}
               className="w-full px-4 py-2 rounded-lg bg-white/5 backdrop-blur-sm border border-purple-400/20 text-gray-100 focus:border-purple-400/40 focus:outline-none focus:ring-2 focus:ring-purple-400/20 h-64"
               required
+            />
+          </div>
+
+          <div>
+            <label htmlFor="tags" className="block text-purple-300 mb-2">Tags (comma-separated)</label>
+            <input
+              type="text"
+              id="tags"
+              name="tags"
+              value={formData.tags}
+              onChange={handleInputChange}
+              placeholder="e.g., React, TypeScript, Web Development"
+              className="w-full px-4 py-2 rounded-lg bg-white/5 backdrop-blur-sm border border-purple-400/20 text-gray-100 focus:outline-none focus:border-purple-400/40"
             />
           </div>
 
@@ -130,8 +204,9 @@ function AdminBlog() {
             <input
               type="text"
               id="readTime"
+              name="readTime"
               value={formData.readTime}
-              onChange={(e) => setFormData({ ...formData, readTime: e.target.value })}
+              onChange={handleInputChange}
               className="w-full px-4 py-2 rounded-lg bg-white/5 backdrop-blur-sm border border-purple-400/20 text-gray-100"
               placeholder="e.g., 5 min read"
               required
@@ -147,6 +222,7 @@ function AdminBlog() {
                 <input
                   type="file"
                   id="image"
+                  name="image"
                   className="hidden"
                   accept="image/*"
                 />
@@ -161,9 +237,9 @@ function AdminBlog() {
             <button
               type="submit"
               className="px-6 py-3 rounded-lg bg-purple-500 hover:bg-purple-600 transition-colors text-white font-medium"
-              disabled={isSubmitting}
+              disabled={loading}
             >
-              {isSubmitting ? 'Publishing...' : 'Publish Post'}
+              {loading ? 'Publishing...' : 'Publish Post'}
             </button>
           </div>
         </form>

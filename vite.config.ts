@@ -8,7 +8,30 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'favicon.png', 'apple-touch-icon.png'],
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg}'],
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'google-fonts-cache',
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 24 * 365 // <== 365 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          }
+        ]
+      },
+      includeAssets: [
+        'favicon.ico',
+        'icons/*.{ico,png,jpg}',
+        'images/**/*.{jpg,png}'
+      ],
       manifest: {
         name: 'Animesh Bhattacharjee Portfolio',
         short_name: 'AB Portfolio',
@@ -31,7 +54,7 @@ export default defineConfig({
       }
     })
   ],
-  base: process.env.VITE_BASE_URL || '/', // or your specific base path if not deploying to root
+  base: '/',
   build: {
     assetsDir: 'assets',
     outDir: 'dist',
@@ -42,6 +65,7 @@ export default defineConfig({
   },
   server: {
     port: 5173,
-    open: true // This will automatically open the browser
+    open: true,
+    host: true // This enables access from other devices on the network
   }
 })

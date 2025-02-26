@@ -1,8 +1,18 @@
-export const DEFAULT_BLOG_IMAGE = 'https://placehold.co/600x400/9333ea/ffffff';
+// Default blog image path (using your existing profile image as fallback)
+export const DEFAULT_BLOG_IMAGE = `${import.meta.env.BASE_URL}images/profile.jpg`;
 
-export const getImageUrl = (imageUrl: string | undefined): string => {
-  if (!imageUrl || imageUrl.includes('via.placeholder.com')) {
-    return DEFAULT_BLOG_IMAGE;
+// Blog image paths
+export const BLOG_IMAGES = {
+  visualSpeech: `${import.meta.env.BASE_URL}images/blog/visual-speech.jpg`,
+  reactTs: `${import.meta.env.BASE_URL}images/blog/react-ts.jpg`,
+  threeJs: `${import.meta.env.BASE_URL}images/blog/threejs.jpg`,
+  mlProd: `${import.meta.env.BASE_URL}images/blog/ml-prod.jpg`,
+};
+
+// Helper function to get blog image URL with fallback
+export const getBlogImageUrl = (imagePath: string): string => {
+  if (!imagePath || imagePath.startsWith('http')) {
+    return imagePath || DEFAULT_BLOG_IMAGE;
   }
-  return imageUrl;
+  return `${import.meta.env.BASE_URL}${imagePath.startsWith('/') ? imagePath.slice(1) : imagePath}`;
 };

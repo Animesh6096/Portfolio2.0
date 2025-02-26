@@ -4,9 +4,24 @@
   "description": "Computer Science Student and Developer Portfolio",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0a0a1a",
+  "background_color": "#030014",
   "theme_color": "#a855f7",
   "icons": [
+    {
+      "src": "/icons/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/icons/icon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
     {
       "src": "/icons/logo192.jpg",
       "sizes": "192x192",
