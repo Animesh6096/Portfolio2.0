@@ -59,48 +59,55 @@ function App() {
     }
   }, [isLoading]);
 
-  // Improved Calendly handling
+  // Optimized Calendly handling
   const openCalendlyScheduler = useCallback(() => {
     const url = 'https://calendly.com/banimesh2002/30min';
     setIsCalendlyLoading(true);
-    
-    const maxAttempts = 5; // Increased from 3
-    let attempts = 0;
 
-    const tryOpenCalendly = () => {
-      console.log('Attempting to open Calendly widget...');
-      if (window.Calendly && window.calendlyLoaded) {
-        try {
-          window.Calendly.initPopupWidget({ url: url });
-          console.log('Calendly widget opened successfully');
-          setIsCalendlyLoading(false);
-          return true;
-        } catch (error) {
-          console.error('Error opening Calendly widget:', error);
-          return false;
-        }
-      }
-      console.log('Calendly not ready yet...');
-      return false;
-    };
-
-    const attemptOpen = () => {
-      if (attempts >= maxAttempts) {
-        console.error('Failed to open Calendly after multiple attempts');
-        // Fallback: Open Calendly in new tab
-        window.open(url, '_blank');
+    // If Calendly is already loaded, open immediately
+    if (window.Calendly && window.calendlyLoaded) {
+      try {
+        window.Calendly.initPopupWidget({ url });
         setIsCalendlyLoading(false);
         return;
+      } catch (error) {
+        console.error('Error opening Calendly widget:', error);
       }
+    }
 
-      if (!tryOpenCalendly()) {
-        attempts++;
-        console.log(`Retrying to open Calendly (attempt ${attempts}/${maxAttempts})`);
-        setTimeout(attemptOpen, 1500); // Increased delay
+    // If not loaded, try loading with timeout
+    const timeout = setTimeout(() => {
+      setIsCalendlyLoading(false);
+      window.open(url, '_blank');
+    }, 3000);
+
+    const checkCalendly = () => {
+      if (window.Calendly && window.calendlyLoaded) {
+        clearTimeout(timeout);
+        try {
+          window.Calendly.initPopupWidget({ url });
+          setIsCalendlyLoading(false);
+        } catch (error) {
+          console.error('Error opening Calendly widget:', error);
+          window.open(url, '_blank');
+        }
+        return;
       }
     };
 
-    attemptOpen();
+    // Check every 100ms for 3 seconds
+    const interval = setInterval(() => {
+      checkCalendly();
+    }, 100);
+
+    setTimeout(() => {
+      clearInterval(interval);
+    }, 3000);
+
+    return () => {
+      clearTimeout(timeout);
+      clearInterval(interval);
+    };
   }, []);
 
   if (isLoading) {

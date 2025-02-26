@@ -19,71 +19,72 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="AB Portfolio" />
     
-    <!-- Improved Calendly integration -->
+    <!-- Optimized Calendly integration -->
     <script>
+      // Preconnect to Calendly domain for faster resource loading
+      const preconnectLink = document.createElement('link');
+      preconnectLink.rel = 'preconnect';
+      preconnectLink.href = 'https://assets.calendly.com';
+      document.head.appendChild(preconnectLink);
+
       window.calendlyLoaded = false;
-      
-      // Add console logging for debugging
-      console.log('Starting Calendly initialization...');
+      let loadAttempted = false;
       
       function initCalendly() {
-        console.log('initCalendly called');
-        window.calendlyLoaded = true;
         if (window.Calendly) {
-          console.log('Calendly initialized successfully');
-        } else {
-          console.warn('Calendly object not available after load');
-          retryCalendlyLoad();
+          window.calendlyLoaded = true;
+          return;
+        }
+        if (!loadAttempted) {
+          loadAttempted = true;
+          loadCalendlyScript();
         }
       }
 
-      function retryCalendlyLoad() {
-        const maxRetries = 5;
+      function loadCalendlyScript() {
+        const script = document.createElement('script');
+        script.src = 'https://assets.calendly.com/assets/external/widget.js';
+        script.async = true;
+        script.crossOrigin = 'anonymous';
+        
+        script.onload = () => {
+          if (window.Calendly) {
+            window.calendlyLoaded = true;
+          } else {
+            retryLoad();
+          }
+        };
+        
+        script.onerror = retryLoad;
+        document.head.appendChild(script);
+      }
+
+      function retryLoad() {
+        const maxRetries = 3;
         let retryCount = 0;
 
         function tryLoad() {
-          if (retryCount >= maxRetries) {
-            console.error('Failed to load Calendly after multiple attempts');
-            return;
-          }
-
-          console.log(`Retrying Calendly load (attempt ${retryCount + 1}/${maxRetries})`);
-          const script = document.createElement('script');
-          script.src = 'https://assets.calendly.com/assets/external/widget.js';
-          script.async = true;
-          script.crossOrigin = 'anonymous';
+          if (retryCount >= maxRetries || window.calendlyLoaded) return;
           
-          script.onload = () => {
-            console.log('Calendly script loaded, checking for window.Calendly');
-            if (window.Calendly) {
-              window.calendlyLoaded = true;
-              console.log('Calendly loaded successfully on retry');
-            } else {
-              console.warn('window.Calendly still not available after script load');
-              retryCount++;
-              setTimeout(tryLoad, 1500);
+          retryCount++;
+          setTimeout(() => {
+            if (!window.calendlyLoaded) {
+              loadCalendlyScript();
             }
-          };
-          
-          script.onerror = (error) => {
-            console.error('Error loading Calendly script:', error);
-            retryCount++;
-            setTimeout(tryLoad, 1500);
-          };
-          
-          document.head.appendChild(script);
+          }, 1000 * retryCount); // Exponential backoff
         }
 
         tryLoad();
       }
+
+      // Load Calendly script only when user interacts with the page
+      window.addEventListener('scroll', initCalendly, { once: true });
+      window.addEventListener('mousemove', initCalendly, { once: true });
+      window.addEventListener('touchstart', initCalendly, { once: true });
+      
+      // Fallback: Load after a delay if no user interaction
+      setTimeout(initCalendly, 3000);
     </script>
-    <script 
-      src="https://assets.calendly.com/assets/external/widget.js" 
-      async 
-      crossorigin="anonymous"
-      onload="initCalendly()"
-      onerror="retryCalendlyLoad()"
-    ></script>
   </head>
   <body class="bg-deep-black">
     <div id="root"></div>
