@@ -22,7 +22,12 @@
     <!-- Improved Calendly integration -->
     <script>
       window.calendlyLoaded = false;
+      
+      // Add console logging for debugging
+      console.log('Starting Calendly initialization...');
+      
       function initCalendly() {
+        console.log('initCalendly called');
         window.calendlyLoaded = true;
         if (window.Calendly) {
           console.log('Calendly initialized successfully');
@@ -33,7 +38,7 @@
       }
 
       function retryCalendlyLoad() {
-        const maxRetries = 3;
+        const maxRetries = 5; // Increased from 3 to 5
         let retryCount = 0;
 
         function tryLoad() {
@@ -46,26 +51,39 @@
           const script = document.createElement('script');
           script.src = 'https://assets.calendly.com/assets/external/widget.js';
           script.async = true;
+          script.crossOrigin = 'anonymous'; // Add CORS header
+          
           script.onload = () => {
+            console.log('Calendly script loaded, checking for window.Calendly');
             if (window.Calendly) {
               window.calendlyLoaded = true;
               console.log('Calendly loaded successfully on retry');
             } else {
+              console.warn('window.Calendly still not available after script load');
               retryCount++;
-              setTimeout(tryLoad, 1000);
+              setTimeout(tryLoad, 1500); // Increased delay
             }
           };
-          script.onerror = () => {
+          
+          script.onerror = (error) => {
+            console.error('Error loading Calendly script:', error);
             retryCount++;
-            setTimeout(tryLoad, 1000);
+            setTimeout(tryLoad, 1500); // Increased delay
           };
+          
           document.head.appendChild(script);
         }
 
         tryLoad();
       }
     </script>
-    <script src="https://assets.calendly.com/assets/external/widget.js" async onload="initCalendly()"></script>
+    <script 
+      src="https://assets.calendly.com/assets/external/widget.js" 
+      async 
+      crossorigin="anonymous"
+      onload="initCalendly()"
+      onerror="retryCalendlyLoad()"
+    ></script>
   </head>
   <body class="bg-deep-black">
     <div id="root"></div>

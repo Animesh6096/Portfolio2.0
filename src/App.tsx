@@ -64,10 +64,11 @@ function App() {
     const url = 'https://calendly.com/banimesh2002/30min';
     setIsCalendlyLoading(true);
     
-    const maxAttempts = 3;
+    const maxAttempts = 5; // Increased from 3
     let attempts = 0;
 
     const tryOpenCalendly = () => {
+      console.log('Attempting to open Calendly widget...');
       if (window.Calendly && window.calendlyLoaded) {
         try {
           window.Calendly.initPopupWidget({ url: url });
@@ -79,12 +80,14 @@ function App() {
           return false;
         }
       }
+      console.log('Calendly not ready yet...');
       return false;
     };
 
     const attemptOpen = () => {
       if (attempts >= maxAttempts) {
         console.error('Failed to open Calendly after multiple attempts');
+        // Fallback: Open Calendly in new tab
         window.open(url, '_blank');
         setIsCalendlyLoading(false);
         return;
@@ -92,7 +95,8 @@ function App() {
 
       if (!tryOpenCalendly()) {
         attempts++;
-        setTimeout(attemptOpen, 1000);
+        console.log(`Retrying to open Calendly (attempt ${attempts}/${maxAttempts})`);
+        setTimeout(attemptOpen, 1500); // Increased delay
       }
     };
 
