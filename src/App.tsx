@@ -22,6 +22,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [contentVisible, setContentVisible] = useState(false);
   const [isCalendlyLoading, setIsCalendlyLoading] = useState(false);
+  const [calendlyError, setCalendlyError] = useState(false);
 
   useEffect(() => {
     // Handle initial loading
@@ -59,54 +60,80 @@ function App() {
     }
   }, [isLoading]);
 
-  // Optimized Calendly handling
+  // Improved Calendly handling
   const openCalendlyScheduler = useCallback(() => {
     const url = 'https://calendly.com/banimesh2002/30min';
     setIsCalendlyLoading(true);
+    setCalendlyError(false);
+    
+    // Function to directly open Calendly in a new tab (fallback)
+    const openInNewTab = () => {
+      setIsCalendlyLoading(false);
+      window.open(url, '_blank');
+    };
+
+    // If we're in a development environment (localhost), just open in a new tab
+    if (window.location.hostname === 'localhost') {
+      console.log('Development environment detected, opening Calendly in new tab');
+      setTimeout(() => {
+        openInNewTab();
+      }, 500); // Small delay for UI feedback
+      return;
+    }
 
     // If Calendly is already loaded, open immediately
     if (window.Calendly && window.calendlyLoaded) {
       try {
         window.Calendly.initPopupWidget({ url });
         setIsCalendlyLoading(false);
-        return;
       } catch (error) {
         console.error('Error opening Calendly widget:', error);
+        setCalendlyError(true);
+        openInNewTab();
       }
+      return;
     }
 
     // If not loaded, try loading with timeout
     const timeout = setTimeout(() => {
-      setIsCalendlyLoading(false);
-      window.open(url, '_blank');
+      console.log('Calendly loading timed out, opening in new tab');
+      setCalendlyError(true);
+      openInNewTab();
     }, 3000);
 
-    const checkCalendly = () => {
-      if (window.Calendly && window.calendlyLoaded) {
+    try {
+      // Create and append the script
+      const script = document.createElement('script');
+      script.src = 'https://assets.calendly.com/assets/external/widget.js';
+      script.async = true;
+      script.onload = () => {
+        window.calendlyLoaded = true;
         clearTimeout(timeout);
         try {
           window.Calendly.initPopupWidget({ url });
           setIsCalendlyLoading(false);
         } catch (error) {
-          console.error('Error opening Calendly widget:', error);
-          window.open(url, '_blank');
+          console.error('Error initializing Calendly widget:', error);
+          setCalendlyError(true);
+          openInNewTab();
         }
-        return;
-      }
-    };
-
-    // Check every 100ms for 3 seconds
-    const interval = setInterval(() => {
-      checkCalendly();
-    }, 100);
-
-    setTimeout(() => {
-      clearInterval(interval);
-    }, 3000);
+      };
+      script.onerror = () => {
+        console.error('Failed to load Calendly widget script');
+        clearTimeout(timeout);
+        setCalendlyError(true);
+        openInNewTab();
+      };
+      document.body.appendChild(script);
+    } catch (error) {
+      console.error('Error loading Calendly script:', error);
+      clearTimeout(timeout);
+      setCalendlyError(true);
+      openInNewTab();
+    }
 
     return () => {
       clearTimeout(timeout);
-      clearInterval(interval);
     };
   }, []);
 
@@ -550,6 +577,11 @@ function App() {
                       <span className="flex items-center justify-center gap-2">
                         <span className="w-5 h-5 border-2 border-purple-300 border-t-transparent rounded-full animate-spin"></span>
                         <span>Loading...</span>
+                      </span>
+                    ) : calendlyError ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <Calendar className="w-5 h-5" />
+                        <span>Open Calendly</span>
                       </span>
                     ) : (
                       <span className="flex items-center justify-center gap-2">

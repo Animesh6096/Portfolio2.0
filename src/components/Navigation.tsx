@@ -1,7 +1,9 @@
-import { Menu, X } from 'lucide-react';
+import { Menu, X, CreditCard } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const Navigation = () => {
+  console.log('Navigation component rendering');
   const [isOpen, setIsOpen] = useState(false);
 
   const menuItems = [
@@ -54,6 +56,15 @@ const Navigation = () => {
       >
         {isOpen ? <X className="w-6 h-6 text-purple-400" /> : <Menu className="w-6 h-6 text-purple-400" />}
       </button>
+      
+      {/* Adding back the direct business card link button */}
+      <Link
+        to="/business-card"
+        className="fixed top-4 right-20 z-50 p-3 rounded-full bg-purple-500/20 backdrop-blur-sm border border-purple-400/20 hover:bg-purple-500/30 transition-colors sm:top-6 sm:right-24"
+        aria-label="View Business Card"
+      >
+        <CreditCard className="w-6 h-6 text-purple-400" />
+      </Link>
 
       {/* Navigation Menu - Updated for compact desktop and mobile */}
       <div
@@ -71,6 +82,16 @@ const Navigation = () => {
               {item.title}
             </button>
           ))}
+          
+          {/* Business Card Link - Keeping this one */}
+          <Link
+            to="/business-card"
+            className="py-3 px-4 mt-4 flex items-center gap-2 text-left text-purple-300 hover:text-purple-200 hover:bg-white/5 rounded-lg transition-colors text-lg sm:text-base border-t border-purple-500/20 pt-4"
+            onClick={() => setIsOpen(false)}
+          >
+            <CreditCard className="w-5 h-5" />
+            <span>3D Business Card</span>
+          </Link>
         </div>
       </div>
 

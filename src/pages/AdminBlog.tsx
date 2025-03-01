@@ -4,6 +4,7 @@ import { ChevronLeft, Upload } from 'lucide-react';
 import { DEFAULT_BLOG_IMAGE } from '../utils/blogUtils';
 import LoadingScreen from '../components/LoadingScreen';
 import Background3D from '../components/Background3D';
+import Navigation from '../components/Navigation';
 import { createBlogPost, getAllCategories } from '../services/blogService';
 
 function AdminBlog() {
@@ -78,6 +79,7 @@ function AdminBlog() {
 
   return (
     <>
+      <Navigation />
       <Background3D />
       <div className="darker-overlay"></div> {/* Added Darker Overlay */}
       <div className="grid-background">

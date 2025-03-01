@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import { BlogPost, getBlogPosts } from '../services/blogService';
 import LoadingScreen from '../components/LoadingScreen';
 import Background3D from '../components/Background3D';
+import Navigation from '../components/Navigation';
 
 export default function BlogPostPage() {
   const { id } = useParams();
@@ -51,6 +52,7 @@ export default function BlogPostPage() {
 
   return (
     <>
+      <Navigation />
       <Background3D />
       <div className="darker-overlay"></div>
       <div className="grid-background opacity-20">

@@ -1,8 +1,5 @@
 import { Canvas } from '@react-three/fiber';
 import { Stars, OrbitControls, Float } from '@react-three/drei';
-import { useRef } from 'react';
-import * as THREE from 'three';
-import { ThreeElements } from '@react-three/fiber';
 
 function AnimatedSpheres() {
   return (
