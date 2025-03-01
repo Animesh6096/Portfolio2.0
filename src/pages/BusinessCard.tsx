@@ -15,7 +15,6 @@ import { Link } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import Background3D from '../components/Background3D';
 import { ErrorBoundary } from 'react-error-boundary';
-import Navigation from '../components/Navigation';
 
 // Social media icon component
 interface SocialIconProps {
@@ -25,16 +24,23 @@ interface SocialIconProps {
 }
 
 function SocialIcon({ Icon, position, url }: SocialIconProps) {
+  const { viewport } = useThree();
+  
+  // Detect if viewport is mobile-sized and adjust icon size accordingly
+  const isMobileViewport = viewport.width < 5;
+  const iconSize = isMobileViewport ? "w-7 h-7" : "w-10 h-10";
+  const iconInnerSize = isMobileViewport ? "w-4 h-4" : "w-5 h-5";
+  
   return (
     <Html position={position} transform occlude>
       <a 
         href={url} 
         target="_blank" 
         rel="noopener noreferrer"
-        className="w-10 h-10 flex items-center justify-center bg-purple-500/30 hover:bg-purple-500/60 rounded-full transition-all transform hover:scale-110 shadow-lg hover:shadow-purple-500/20"
+        className={`${iconSize} flex items-center justify-center bg-purple-500/30 hover:bg-purple-500/60 rounded-full transition-all transform hover:scale-110 shadow-lg hover:shadow-purple-500/20`}
         onClick={(e) => e.stopPropagation()}
       >
-        <Icon className="w-5 h-5 text-white" />
+        <Icon className={`${iconInnerSize} text-white`} />
       </a>
     </Html>
   );
@@ -347,7 +353,7 @@ function Card({ flipped, toggleFlip }: CardProps) {
         
         {/* Back content */}
         <Text
-          position={[0, 0.5, 0.01]}
+          position={[0, cardHeight * 0.35, 0.01]}
           fontSize={0.12}
           color="#ffffff"
           anchorX="center"
@@ -358,8 +364,8 @@ function Card({ flipped, toggleFlip }: CardProps) {
         </Text>
         
         {/* Decorative line - gradient effect similar to simple version */}
-        <mesh position={[0, 0.4, 0.01]} rotation={[0, 0, 0]}>
-          <planeGeometry args={[1.5, 0.005, 4, 1]} />
+        <mesh position={[0, cardHeight * 0.25, 0.01]} rotation={[0, 0, 0]}>
+          <planeGeometry args={[cardWidth * 0.8, 0.005, 4, 1]} />
           <meshPhysicalMaterial 
             color="#a78bfa" 
             transparent 
@@ -373,37 +379,37 @@ function Card({ flipped, toggleFlip }: CardProps) {
         {/* Social media icons - improved layout to prevent overlapping */}
         <SocialIcon 
           Icon={Github} 
-          position={[-0.8, 0.2, 0.1]} 
+          position={[-cardWidth * 0.3, cardHeight * 0.1, 0.1]} 
           url="https://github.com/animesh6096" 
         />
         
         <SocialIcon 
           Icon={Linkedin} 
-          position={[-0.4, 0.2, 0.1]} 
+          position={[-cardWidth * 0.15, cardHeight * 0.1, 0.1]} 
           url="https://www.linkedin.com/in/animesh-bhattacharjee-jhalok/" 
         />
         
         <SocialIcon 
           Icon={Facebook} 
-          position={[0, 0.2, 0.1]} 
+          position={[0, cardHeight * 0.1, 0.1]} 
           url="https://www.facebook.com/" 
         />
         
         {/* Social media icons - second row */}
         <SocialIcon 
           Icon={Mail} 
-          position={[0.4, 0.2, 0.1]} 
+          position={[cardWidth * 0.15, cardHeight * 0.1, 0.1]} 
           url="mailto:banimesh2002@gmail.com" 
         />
         
         <SocialIcon 
           Icon={Phone} 
-          position={[0.8, 0.2, 0.1]} 
+          position={[cardWidth * 0.3, cardHeight * 0.1, 0.1]} 
           url="tel:+1234567890" 
         />
         
         <Text
-          position={[0, -0.2, 0.01]}
+          position={[0, -cardHeight * 0.2, 0.01]}
           fontSize={0.07}
           color="#d1d5db"
           anchorX="center"
@@ -643,7 +649,6 @@ export default function BusinessCard() {
   
   return (
     <>
-      <Navigation />
       {/* Reduce background visibility by adding an overlay */}
       <div className="fixed inset-0 bg-black/70 z-[-40]"></div>
       <Background3D />

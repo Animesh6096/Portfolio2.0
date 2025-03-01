@@ -4,7 +4,6 @@ import { ChevronLeft, Plus, Search } from 'lucide-react';
 import LoadingScreen from '../components/LoadingScreen';
 import { BlogPost, getBlogPosts, getAllCategories, getAllTags } from '../services/blogService';
 import Background3D from '../components/Background3D';
-import Navigation from '../components/Navigation';
 
 export default function Blog() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -60,7 +59,6 @@ export default function Blog() {
 
   return (
     <>
-      <Navigation />
       <Background3D />
       <div className="darker-overlay"></div> {/* Added Darker Overlay */}
       <div className="grid-background opacity-20">
